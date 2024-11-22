@@ -136,5 +136,28 @@ This returns the base64 encoded source code:
 
 ![upload4](https://github.com/user-attachments/assets/fb638f0c-8f05-4948-8b06-b4be32ddaef8)
 
-Now, clicking the php version, gives us the reverse shell.
+Now, clicking the php version, gives us the reverse shell as www-data:
 
+![www-data](https://github.com/user-attachments/assets/49192d4e-5ddb-44ac-83e3-c25b2c9fc2ed)
+
+If we cd to zeamkish's home directory we see user.txt but we don't have permissions to read it, but right below it is ssh_creds.txt so we can use this to ssh as zeamkish and get user.txt.
+
+![ssh_creds](https://github.com/user-attachments/assets/8fe4531b-911c-45ec-a3c7-12987d28b4c1)
+
+The credentials for zeam's ssh don't work for sudo -l:
+
+![user txt](https://github.com/user-attachments/assets/8a71d803-2878-42e0-9304-79f378a8cd1f)
+
+## Privilege Escalation
+
+While looking for ways to escalate to root, I ran this find command to look for SUIDS:
+
+![find](https://github.com/user-attachments/assets/61a9f86b-3b76-4857-ab7d-bf4addc4eed8)
+
+And /usr/bin/find shows that it is a setuid binary that can be executed as root.
+
+I used /usr/bin/find to spawn a root shell:
+
+![root txt](https://github.com/user-attachments/assets/519e2359-bb8f-4edf-9ef6-8fd6f84c3e43)
+
+Thanks, and I hope you enjoyed this CTF!
