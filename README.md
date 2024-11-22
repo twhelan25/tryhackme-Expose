@@ -126,9 +126,7 @@ Now, we just need to figure where the file has been uploaded to, so we can excut
 
 ![file uploaded](https://github.com/user-attachments/assets/fbbc8de0-466a-4c81-b86a-460f6fecc239)
 
-![upload3](https://github.com/user-attachments/assets/4054cf86-f060-46e7-9433-0a97c5ef9556)
-
-We can reveal the source code using lfi and the php filer
+We can reveal the source code using lfi and a php filer
 ```bash
 /file1010111/index.php?file=php://filter/convert.base64-encode/resource=../upload-cv00101011/index.php
 ```
