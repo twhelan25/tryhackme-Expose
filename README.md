@@ -74,6 +74,10 @@ When I tried a single quote ' in the user input, the popup displayed undefined:
 
 ![adminsql](https://github.com/user-attachments/assets/11c18c17-61ec-4149-9b65-b820b799ee31)
 
-This is a clear sign that the login page is vulnerable to sql injection.
+This is a clear sign that the login page is vulnerable to sql injection. We will capture a login request to this panel in burp suite and save it as request.txt:
+
+![request txt](https://github.com/user-attachments/assets/55f02eea-ae9b-45fb-8ae2-8c1b8a2a06ab)
+
+
 
 
