@@ -78,6 +78,65 @@ This is a clear sign that the login page is vulnerable to sql injection. We will
 
 ![request txt](https://github.com/user-attachments/assets/55f02eea-ae9b-45fb-8ae2-8c1b8a2a06ab)
 
+This the first sqlmap scan that I ran on requests.txt:
 
+![sqlmap1](https://github.com/user-attachments/assets/054b84c5-9c7d-446c-898f-eff64452a2cf)
 
+And this reveals, the database:expose, the table:user, two directories, a password, and a hash.
+
+![sqlmap2](https://github.com/user-attachments/assets/67f2cea9-87f3-40a2-9107-17aa9964912b)
+
+First I'm going to head to crackstation.net and crack that hash:
+
+![crackstation net](https://github.com/user-attachments/assets/990f0503-2353-48ad-b5f1-a0814f23a4e1)
+
+Now I'll head to the first directory where we are prompted for a password. The one I just cracked works:
+
+![index php](https://github.com/user-attachments/assets/290f2951-e2f6-4cd2-bcc4-b50c0dfbc73b)
+
+The index.php page, just reveals this message:
+
+![index php2](https://github.com/user-attachments/assets/631e8b32-9d14-473a-af3f-9df2e58581a3)
+
+If we check the source code, we can see this comment:
+
+![hint](https://github.com/user-attachments/assets/d8fa9568-fc82-4063-9447-d2c1c00a0f2a)
+
+I followed that hint and used .php?file=/etc/passwd and got the file.
+
+![passwd](https://github.com/user-attachments/assets/29472006-2073-482f-9dfc-2fecce3f03ae)
+
+Now, let's head to the upload directory:
+
+![upload](https://github.com/user-attachments/assets/a372b95c-e733-4422-beba-06bb794d1a5e)
+
+And we are prompted for a password, that is a machine user that starts with z. Looking at the /etc/passwd file, we see a zeamkish user, and this works.
+
+And now we have a file upload page:
+
+![upload2](https://github.com/user-attachments/assets/355608f7-b0f7-4cca-acf9-796cf439d98f)
+
+Checking the source code shows that only jpg or png files are excepted. But, I think this is only on the client side. So, I will grab a php shell from revshells.com, change the extension to png, upload load it, but intercept the upload with burp, and switch the extension back to php:
+
+![burp1](https://github.com/user-attachments/assets/b9c0decf-e451-41a7-a8f4-2d753b5360b7)
+
+![burp2](https://github.com/user-attachments/assets/54cb775a-c2a7-433f-ab24-1c8a74576a5c)
+
+Now, we just need to figure where the file has been uploaded to, so we can excute it.
+
+![file uploaded](https://github.com/user-attachments/assets/fbbc8de0-466a-4c81-b86a-460f6fecc239)
+
+![upload3](https://github.com/user-attachments/assets/4054cf86-f060-46e7-9433-0a97c5ef9556)
+
+We can reveal the source code using lfi and the php filer
+```bash
+/file1010111/index.php?file=php://filter/convert.base64-encode/resource=../upload-cv00101011/index.php
+```
+This returns the base64 encoded source code:
+
+![b64source](https://github.com/user-attachments/assets/d4a91166-9122-40f6-9076-9a786a5aeaa4)
+
+![upload4](https://github.com/user-attachments/assets/fb638f0c-8f05-4948-8b06-b4be32ddaef8)
+
+Now, clicking the php version, gives us the reverse shell.
 
